@@ -13,34 +13,45 @@
 
     <artifactId>audiofingerprint-core</artifactId>
 
-    <dependencies>
+    <profiles>
+        <profile>
+            <id>windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>mfsampledsp</artifactId>
+                    <version>0.9.7</version>
+                    <type>jar</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>mfsampledsp</artifactId>
+                    <version>0.9.7</version>
+                    <type>dll</type>
+                    <classifier>i386</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>mfsampledsp</artifactId>
+                    <version>0.9.7</version>
+                    <type>dll</type>
+                    <classifier>x86_64</classifier>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
+    <dependencies>
         <!--dsp-->
         <dependency>
             <groupId>com.tagtraum</groupId>
             <artifactId>jipes</artifactId>
             <version>0.9.14</version>
-        </dependency>
-        <!--windows dep-->
-        <dependency>
-            <groupId>com.tagtraum</groupId>
-            <artifactId>mfsampledsp</artifactId>
-            <version>0.9.7</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>com.tagtraum</groupId>
-            <artifactId>mfsampledsp</artifactId>
-            <version>0.9.7</version>
-            <type>dll</type>
-            <classifier>i386</classifier>
-        </dependency>
-        <dependency>
-            <groupId>com.tagtraum</groupId>
-            <artifactId>mfsampledsp</artifactId>
-            <version>0.9.7</version>
-            <type>dll</type>
-            <classifier>x86_64</classifier>
         </dependency>
     </dependencies>
 </project>

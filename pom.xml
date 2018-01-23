@@ -14,6 +14,14 @@
             <name>beaTunes Repository</name>
             <url>https://www.beatunes.com/repo/maven2</url>
         </repository>
+        <repository>
+            <id>params-mvn-repo</id>
+            <url>https://raw.github.com/mknblch/params/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
     </repositories>
 
     <packaging>pom</packaging>
