@@ -1,4 +1,4 @@
-package de.mknblch.audiofringerprint.h2;
+package de.mknblch.audiofingerprint.h2;
 
 import de.mknblch.audiofingerprint.Hash;
 import org.h2.jdbcx.JdbcDataSource;
@@ -83,7 +83,7 @@ public class H2Dao {
             }
 
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STATEMENT, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, track);
+//            preparedStatement.setString(1, track);
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {

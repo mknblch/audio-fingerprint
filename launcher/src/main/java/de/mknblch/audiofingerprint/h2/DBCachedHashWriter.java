@@ -1,4 +1,4 @@
-package de.mknblch.audiofringerprint.h2;
+package de.mknblch.audiofingerprint.h2;
 
 import com.tagtraum.jipes.AbstractSignalProcessor;
 import de.mknblch.audiofingerprint.Feature;

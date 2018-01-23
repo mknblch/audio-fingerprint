@@ -1,4 +1,4 @@
-package de.mknblch.audiofringerprint.h2;
+package de.mknblch.audiofingerprint.h2;
 
 import com.carrotsearch.hppc.*;
 import com.carrotsearch.hppc.cursors.IntObjectCursor;

@@ -1,4 +1,4 @@
-package de.mknblch.audiofringerprint.launcher;
+package de.mknblch.audiofingerprint.launcher;
 
 import com.tagtraum.jipes.SignalPipeline;
 import com.tagtraum.jipes.SignalPump;
@@ -20,7 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import static de.mknblch.audiofringerprint.launcher.FingerprintSetup.*;
+import static de.mknblch.audiofingerprint.launcher.FingerprintSetup.*;
 
 /**
  * Created by mknblch on 24.08.2015.

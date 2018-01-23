@@ -1,4 +1,4 @@
-package de.mknblch.audiofringerprint.launcher;
+package de.mknblch.audiofingerprint.launcher;
 
 import de.mknblch.audiofingerprint.AudioSource;
 import de.mknblch.audiofingerprint.PipeBuilder;
