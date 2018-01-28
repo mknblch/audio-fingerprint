@@ -1,6 +1,7 @@
 package utils;
 
 /**
+ *
  * @author mknblch
  */
 public enum Tones {
@@ -29,6 +30,7 @@ public enum Tones {
         return octaveShift(base, shift);
     }
 
+    // TODO
     private static double octaveShift(double base, int shift) {
         if (shift < 0) {
             for (int i = shift; i < 0; i++) {

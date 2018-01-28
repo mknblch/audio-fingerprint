@@ -8,6 +8,10 @@ import de.mknblch.audiofp.common.FloatRing;
 import java.io.IOException;
 
 /**
+ * AudioSpectrum processor to kill signals lower then
+ * a given factor multiplied by the running maximum
+ * over a given amount of frames.
+ *
  * @author mknblch
  */
 public class Whitening extends AbstractSignalProcessor<AudioSpectrum, AudioSpectrum> {

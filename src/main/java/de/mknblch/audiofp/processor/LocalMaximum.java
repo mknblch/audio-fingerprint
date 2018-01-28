@@ -9,6 +9,12 @@ import java.util.Arrays;
 import java.util.function.IntBinaryOperator;
 
 /**
+ * Feature Processor for finding local maximum in magnitudes with fixed time window size and
+ * a dynamic frequency window size.
+ *
+ * The freq. window is calculated using an IntBinaryOperator. The window function automatically
+ * adjusts its offsets at the borders to keep its size and avoid padding.
+ *
  * @author mknblch
  */
 public class LocalMaximum extends AbstractFeatureProcessor {
@@ -27,6 +33,11 @@ public class LocalMaximum extends AbstractFeatureProcessor {
         values = new float[max];
     }
 
+    /**
+     *
+     * @param windowFunction (index, sampled)
+     * @return
+     */
     public LocalMaximum withWindowFunction(IntBinaryOperator windowFunction) {
         this.windowFunction = windowFunction;
         return this;
@@ -118,8 +129,11 @@ public class LocalMaximum extends AbstractFeatureProcessor {
         }
     }
 
-    private static int rgb = ImageBuffer.rgb(255, 50, 50);
+    /**
+     * Draw function. Renders maxima as red dots
+     */
     public static ImageAggregator.DrawFunction DRAW_FUNC = (image, features) -> {
+        final int rgb = ImageBuffer.rgb(255, 50, 50);
 
         for (Feature feature : features) {
             final int[] maxBins = feature.maxBins;

@@ -6,6 +6,11 @@ import com.tagtraum.jipes.math.MapFunction;
 import com.tagtraum.jipes.universal.Mapping;
 
 /**
+ * maps magnitude using natural logarithm and a scale factor
+ * <pre>
+ * y = log(1.0 + x) * scale
+ * </pre>
+ *
  * @author mknblch
  */
 public class Log1pMapping {

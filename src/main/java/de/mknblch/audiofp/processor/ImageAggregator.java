@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Feature Processor to aggregate all frames to an image.
+ *
  * @author mknblch
  */
 public class ImageAggregator extends SignalAggregator<Feature, BufferedImage> {
@@ -68,6 +70,9 @@ public class ImageAggregator extends SignalAggregator<Feature, BufferedImage> {
         return this;
     }
 
+    /**
+     * register new draw function to enrich the image
+     */
     public ImageAggregator addDrawFunction(DrawFunction drawFunction) {
         drawFunctions.add(drawFunction);
         return this;

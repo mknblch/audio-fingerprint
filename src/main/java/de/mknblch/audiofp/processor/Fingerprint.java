@@ -15,11 +15,16 @@ import java.util.function.IntBinaryOperator;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
+ * Feature Processor calculates hashes based on maxima.
+ *
+ * The processor aggregates up to 32 frames and builds hashes by taking all
+ * maximum bins and connecting them to
+ *
  * @author mknblch
  */
 public class Fingerprint extends FeatureQueue<Feature> {
 
-    public static final int MAX_FRAMES = 64;
+    public static final int MAX_FRAMES = 32;
 
     public interface ScoreFunction {
 
