@@ -11,17 +11,17 @@ import java.util.BitSet;
 /**
  * @author mknblch
  */
-public class FilterDuplicateHash extends AbstractSignalProcessor<Feature, Feature> {
+public class DuplicateFilter extends AbstractSignalProcessor<Feature, Feature> {
 
-    public static final String ID = FilterDuplicateHash.class.getName();
+    public static final String ID = DuplicateFilter.class.getName();
 
     private final BitSet hashes;
 
-    public FilterDuplicateHash() {
+    public DuplicateFilter() {
         this(ID);
     }
 
-    public FilterDuplicateHash(Object id) {
+    public DuplicateFilter(Object id) {
         super(id);
         hashes = new BitSet();
     }

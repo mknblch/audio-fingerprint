@@ -5,7 +5,6 @@ import com.tagtraum.jipes.audio.*;
 import com.tagtraum.jipes.math.MapFunction;
 import com.tagtraum.jipes.math.WindowFunction;
 import com.tagtraum.jipes.universal.Mapping;
-import audiofingerprint.processor.*;
 import de.mknblch.audiofp.processor.*;
 import utils.Tones;
 import utils.WindowSizeFunction;

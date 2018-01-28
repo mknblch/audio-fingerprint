@@ -20,14 +20,14 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
 
     public static final Comparator<Candidate> CANDIDATE_COMPARATOR = Comparator.comparingInt(a -> a.count);
     private final int buckets;
-    private final audiofingerprint.H2Dao dao;
+    private final H2Dao dao;
 
     private final SignalProcessorSupport<List<String>> signalProcessorSupport = new SignalProcessorSupport<>();
 
     private final Map<Integer, LinkedList<Integer>> bag;
     private List<String> result;
 
-    public DBFinder(int buckets, audiofingerprint.H2Dao dao) {
+    public DBFinder(int buckets, H2Dao dao) {
         this.buckets = buckets;
         this.dao = dao;
         bag = new HashMap<>();
@@ -140,7 +140,7 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
             this.count = count;
         }
 
-        public String mapToString(audiofingerprint.H2Dao dao) {
+        public String mapToString(H2Dao dao) {
             return dao.getTrack(track) + " (" + count + ")";
 
         }

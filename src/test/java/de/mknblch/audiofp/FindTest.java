@@ -2,9 +2,11 @@ package de.mknblch.audiofp;
 
 import com.tagtraum.jipes.SignalPump;
 import com.tagtraum.jipes.audio.AudioBuffer;
-import com.tagtraum.jipes.audio.AudioSignalSource;
 import de.mknblch.audiofp.common.TimestampSignalSource;
+import de.mknblch.audiofp.db.DBFinder;
+import de.mknblch.audiofp.db.H2Dao;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -18,27 +20,38 @@ import java.util.List;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
+ * Match track based on first 10 seconds
+ *
  * @author mknblch
  */
+@Ignore
 public class FindTest {
 
     private static final Logger LOGGER = getLogger(FindTest.class);
 
+    /**
+     * magic value
+     *
+     * number of timebuckets for track matching.
+     * should be somehow related to the recording duration for matching
+     */
     public static final int BUCKETS = 100;
-    private static Path path = Paths.get("");
 
-    private static audiofingerprint.H2Dao db;
+    // TODO change
+    private static Path path = Paths.get("C:/data/test/tracks/Bobby Hebb - Sunny (Anaa Remix).mp3");
+
+    private static H2Dao db;
 
     @BeforeClass
     public static void setup() throws SQLException {
-        db = new audiofingerprint.H2Dao(Paths.get("./", "tracks.db"));
+        db = new H2Dao(Paths.get("./", "tracks.db"));
     }
 
     @Test
     public void testFind() throws Exception {
 
         LOGGER.info("scanning {}", path);
-        findTrack(path, 0, 500)
+        findTrack(path, 0, 10_000)
                 .forEach(System.out::println);
 
     }
@@ -46,17 +59,21 @@ public class FindTest {
     private List<String> findTrack(Path path, long start, long length) throws IOException, UnsupportedAudioFileException {
 
         final SignalPump<AudioBuffer> pump =
-                new SignalPump<>(
+                new SignalPump<AudioBuffer>(
                         new TimestampSignalSource<AudioBuffer>(
-                                new AudioSignalSource(audiofingerprint.Setup.AUDIOSOURCE_SETUP.open(path)),
+                                Setup.AUDIOSOURCE_SETUP.open(path),
                                 start,
                                 length));
+//
+//        final SignalPump<AudioBuffer> pump =
+//                new SignalPump<AudioBuffer>(new AudioSignalSource(Setup.AUDIOSOURCE_SETUP.open(path)));
 
-        pump.add(audiofingerprint.Setup.FINGERPRINT_SETUP
+        pump.add(Setup.FINGERPRINT_SETUP
                 .build()
-                .joinWith(new audiofingerprint.DBFinder(BUCKETS, db)));
+//                .joinWith(new DuplicateFilter())
+                .joinWith(new DBFinder(BUCKETS, db)));
 
-        return (List<String>) pump.pump().get(audiofingerprint.DBFinder.ID);
+        return (List<String>) pump.pump().get(DBFinder.ID);
     }
 
 }

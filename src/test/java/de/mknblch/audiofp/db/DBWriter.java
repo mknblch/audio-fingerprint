@@ -19,10 +19,10 @@ public class DBWriter extends AbstractSignalProcessor<Feature, Void> {
     private static final Logger LOGGER = getLogger(DBWriter.class);
 
     private final Path track;
-    private final audiofingerprint.H2Dao.BatchInsert batchInsert;
+    private final H2Dao.BatchInsert batchInsert;
     private final boolean trackExists;
 
-    public DBWriter(audiofingerprint.H2Dao dao, Path track) throws SQLException {
+    public DBWriter(H2Dao dao, Path track) throws SQLException {
         this.track = track;
         final String name = track.getFileName().toString();
         trackExists = dao.trackExists(name);

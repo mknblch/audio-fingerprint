@@ -7,6 +7,7 @@ import com.tagtraum.jipes.audio.AudioSignalSource;
 import de.mknblch.audiofp.processor.Fingerprint;
 import de.mknblch.audiofp.processor.ImageAggregator;
 import de.mknblch.audiofp.processor.LocalMaximum;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -15,31 +16,33 @@ import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static launcher.FingerprintSetup.AUDIOSOURCE_SETUP;
-import static launcher.FingerprintSetup.FINGERPRINT_SETUP;
-
 /**
+ * Renders spectrogram and visualizes all hashes.
+ *
  * @author mknblch
  */
+@Ignore
 public class ShowTrackTest {
 
+    // TODO change
     public static final Path PATH = Paths.get("C:/data/test/tracks/Bobby Hebb - Sunny (Anaa Remix).mp3");
     
     @Test
     public void testShowTrack() throws Exception {
 
         final SignalPump<AudioBuffer> pump =
-                new SignalPump<>(new AudioSignalSource(AUDIOSOURCE_SETUP.open(PATH)));
-        final SignalPipeline<AudioBuffer, BufferedImage> pipe = FINGERPRINT_SETUP
+                new SignalPump<>(new AudioSignalSource(Setup.AUDIOSOURCE_SETUP.open(PATH)));
+        final SignalPipeline<AudioBuffer, BufferedImage> pipe = Setup.FINGERPRINT_SETUP
                 .build()
                 .joinWith(new ImageAggregator(LocalMaximum.DRAW_FUNC, Fingerprint.DRAW_FUNCTION));
         pump.add(pipe);
         final BufferedImage bi = (BufferedImage) pump.pump().get(ImageAggregator.ID);
         final Fingerprint.Info info = (Fingerprint.Info) pipe.getProcessorWithId(Fingerprint.Info.ID);
+
         show(bi, info.getNumHashes(), info.getNumUniqueHashes());
     }
 
-    private void show(BufferedImage img, int numberOfHashes, int uniqueHashes) {
+    private void show(BufferedImage img, int numberOfHashes, int uniqueHashes) throws InterruptedException {
 
         javax.swing.SwingUtilities.invokeLater(() -> {
 
@@ -55,5 +58,7 @@ public class ShowTrackTest {
             frame.setVisible(true);
 
         });
+
+        Thread.sleep(20_000);
     }
 }

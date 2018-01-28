@@ -62,7 +62,7 @@ public class H2Dao {
     }
 
     public boolean trackExists(String track) {
-        final ResultSet resultSet = executeQuery("SELECT id FROM tracks WHERE name='" + track + "'");
+        final ResultSet resultSet = executeQuery("SELECT id FROM tracks WHERE name='" + track.replaceAll("'", "") + "'"); // i know
         try {
             if (resultSet.next()) {
                 return true;
@@ -74,12 +74,13 @@ public class H2Dao {
     }
 
     public int addOrGetTrackId(String track) {
-        final ResultSet resultSet = executeQuery("SELECT id FROM tracks WHERE name='" + track + "'");
+        final ResultSet resultSet = executeQuery("SELECT id FROM tracks WHERE name='" + track.replaceAll("'", "") + "'"); // ...
         try {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_STATEMENT, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, track);
             preparedStatement.executeUpdate();
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
