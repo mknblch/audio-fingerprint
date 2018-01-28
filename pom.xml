@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.mknblch.audiofingerprint</groupId>
+    <groupId>audiofingerprint</groupId>
     <artifactId>audiofingerprint</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -14,22 +14,9 @@
             <name>beaTunes Repository</name>
             <url>https://www.beatunes.com/repo/maven2</url>
         </repository>
-        <repository>
-            <id>params-mvn-repo</id>
-            <url>https://raw.github.com/mknblch/params/mvn-repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
     </repositories>
 
     <packaging>pom</packaging>
-
-    <modules>
-        <module>core</module>
-        <module>launcher</module>
-    </modules>
 
     <profiles>
         <profile>
@@ -66,6 +53,12 @@
 
 
     <dependencies>
+        <!--dsp-->
+        <dependency>
+            <groupId>com.tagtraum</groupId>
+            <artifactId>jipes</artifactId>
+            <version>0.9.14</version>
+        </dependency>
         <!--logging-->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -84,6 +77,12 @@
         </dependency>
         <!--test-->
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.196</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -101,28 +100,6 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>jar-with-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <mainClass>de.mknblch.audiofingerprint.launcher.Launcher</mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptor>assembly.xml</descriptor>
-                            <appendAssemblyId>false</appendAssemblyId>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
