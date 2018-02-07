@@ -76,13 +76,13 @@ public class PipeBuilder {
         return this;
     }
 
-    public PipeBuilder withCutFreqBottom(double cutFreqBottom) {
-        this.cutFreqBottom = cutFreqBottom;
+    public PipeBuilder withDownsample(int downsample) {
+        this.downsample = downsample;
         return this;
     }
 
-    public PipeBuilder withDownsample(int downsample) {
-        this.downsample = downsample;
+    public PipeBuilder withCutFreqBottom(double cutFreqBottom) {
+        this.cutFreqBottom = cutFreqBottom;
         return this;
     }
 

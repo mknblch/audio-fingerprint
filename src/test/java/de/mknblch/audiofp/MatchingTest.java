@@ -25,9 +25,9 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @author mknblch
  */
 @Ignore
-public class FindTest {
+public class MatchingTest {
 
-    private static final Logger LOGGER = getLogger(FindTest.class);
+    private static final Logger LOGGER = getLogger(MatchingTest.class);
 
     /**
      * magic value
