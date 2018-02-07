@@ -25,7 +25,7 @@ There are 3 different tasks which can be done with this project. It either impor
 against the DB or renders sexy images with the spectrum, peaks and hashes visualized. The whole project is built around 
 unit tests since managing a runnable jar with native dependencies is a mess and.. it's still a P.o.C. 
 
-The mp3-conversion and all DSP-tasks are realized with @hendricks73's great libraries:
+The mp3-conversion and all DSP-tasks are realized with @hendriks73's great libraries:
  - [Jipes](https://github.com/hendriks73/jipes) for all the DSP tasks 
  - [mfsampledsp](https://github.com/hendriks73/mfsampledsp) for mp3 conversion on windows
  - [casampledsp](https://github.com/hendriks73/casampledsp) on mac
