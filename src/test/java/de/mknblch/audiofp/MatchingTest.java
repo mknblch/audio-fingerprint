@@ -2,9 +2,9 @@ package de.mknblch.audiofp;
 
 import com.tagtraum.jipes.SignalPump;
 import com.tagtraum.jipes.audio.AudioBuffer;
+import de.mknblch.audiofp.buffer.DB;
 import de.mknblch.audiofp.common.TimestampSignalSource;
 import de.mknblch.audiofp.db.DBFinder;
-import de.mknblch.audiofp.db.H2Dao;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -35,24 +37,39 @@ public class MatchingTest {
      * number of timebuckets for track matching.
      * should be somehow related to the recording duration for matching
      */
-    public static final int BUCKETS = 100;
+    public static final int BUCKETS = 10000;
 
     // TODO change
-    private static Path path = Paths.get("C:/data/test/tracks/Bobby Hebb - Sunny (Anaa Remix).mp3");
+    private static Path dbPath = Paths.get("D:/db.db");
 
-    private static H2Dao db;
+    private static Path path = Paths.get("C:/data/test/mix");
+
+    private static DB db;
 
     @BeforeClass
-    public static void setup() throws SQLException {
-        db = new H2Dao(Paths.get("./", "tracks.db"));
+    public static void setup() throws IOException {
+        db = DB.load(dbPath);
+        System.out.println(db);
     }
 
     @Test
     public void testFind() throws Exception {
 
         LOGGER.info("scanning {}", path);
-        findTrack(path, 0, 10_000)
-                .forEach(System.out::println);
+
+        Files.walk(path)
+                .forEach(p -> {
+                    if (p.toFile().isFile()) {
+                        try {
+                            System.out.println(p);
+                            findTrack(p, 0, 5000)
+                                    .forEach(t -> System.out.println("\t" + t));
+                        } catch (IOException | UnsupportedAudioFileException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
 
     }
 

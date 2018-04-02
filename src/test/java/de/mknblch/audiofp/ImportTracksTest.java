@@ -4,8 +4,8 @@ import com.tagtraum.jipes.SignalPipeline;
 import com.tagtraum.jipes.SignalPump;
 import com.tagtraum.jipes.audio.AudioBuffer;
 import com.tagtraum.jipes.audio.AudioSignalSource;
+import de.mknblch.audiofp.buffer.DB;
 import de.mknblch.audiofp.db.DBWriter;
-import de.mknblch.audiofp.db.H2Dao;
 import de.mknblch.audiofp.processor.Fingerprint;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -36,15 +37,16 @@ public class ImportTracksTest {
 
     private static final String filetypes = "wav,mp3";
     // TODO change
-    private static Path path = Paths.get("c:/data/test/tracks");
+//    private static Path path = Paths.get("c:/data/test/tracks");
+    private static Path path = Paths.get("D:/music");
 
-    private static H2Dao db;
     private static ExecutorService pool;
+    private static DB db;
 
     @BeforeClass
-    public static void setup() throws SQLException {
-        db = new H2Dao(Paths.get("./", "tracks.db"));
-        pool = Executors.newFixedThreadPool(6);
+    public static void setup() throws IOException {
+        db = DB.load(Paths.get("D:/db.db"));
+        pool = Executors.newFixedThreadPool(7);
     }
 
     @Test
@@ -52,7 +54,16 @@ public class ImportTracksTest {
 
         final List<Path> pathList = Setup.listTracks(path, filetypes);
 
+        final Predicate<Path> known = db.isKnown();
+
+        int i = 0;
         for (Path path : pathList) {
+            if (known.test(path)) {
+                continue;
+            }
+            if (i++ > 50) {
+                break;
+            }
             pool.execute(() -> {
                 try {
                     importTrack(path);
@@ -65,6 +76,10 @@ public class ImportTracksTest {
         pool.shutdown();
         pool.awaitTermination(10L, TimeUnit.MINUTES);
         LOGGER.info("done");
+
+        System.out.println(db);
+
+        db.write(Paths.get("D:/db.db"));
     }
 
     private void importTrack(Path path) throws IOException, UnsupportedAudioFileException, SQLException {
@@ -73,7 +88,7 @@ public class ImportTracksTest {
                 new SignalPump<>(new AudioSignalSource(Setup.AUDIOSOURCE_SETUP.open(path)));
         final SignalPipeline<AudioBuffer, Void> pipe = Setup.FINGERPRINT_SETUP
                 .build()
-                .joinWith(new DBWriter(db, path));
+                .joinWith(new DBWriter(db.batch(path)));
         pump.add(pipe);
         pump.pump();
         final Fingerprint.Info info = (Fingerprint.Info) pipe.getProcessorWithId(Fingerprint.Info.ID);

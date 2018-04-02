@@ -4,6 +4,7 @@ import com.tagtraum.jipes.SignalProcessor;
 import com.tagtraum.jipes.SignalProcessorSupport;
 import de.mknblch.audiofp.Feature;
 import de.mknblch.audiofp.Hash;
+import de.mknblch.audiofp.buffer.DB;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -20,16 +21,16 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
 
     public static final Comparator<Candidate> CANDIDATE_COMPARATOR = Comparator.comparingInt(a -> a.count);
     private final int buckets;
-    private final H2Dao dao;
 
     private final SignalProcessorSupport<List<String>> signalProcessorSupport = new SignalProcessorSupport<>();
 
     private final Map<Integer, LinkedList<Integer>> bag;
+    private final DB db;
     private List<String> result;
 
-    public DBFinder(int buckets, H2Dao dao) {
+    public DBFinder(int buckets, DB db) {
         this.buckets = buckets;
-        this.dao = dao;
+        this.db = db;
         bag = new HashMap<>();
     }
 
@@ -39,15 +40,8 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
         if (null == hashes || hashes.length == 0) {
             return;
         }
-        final ResultSet resultSet = dao.findHashes(hashes); //, 0);
-        try {
-            while (resultSet.next()) {
-                final int track = resultSet.getInt(1);
-                final int ts = resultSet.getInt(2);
-                add(track, ts);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        for (Hash hash : hashes) {
+            db.find(hash.hash(), this::add);
         }
     }
 
@@ -63,7 +57,7 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
 
         result = list.stream()
                 .sorted(CANDIDATE_COMPARATOR.reversed())
-                .map(c -> c.mapToString(dao))
+                .map(c -> c.count + " : " + db.getTrack(c.track))
                 .limit(3)
                 .collect(Collectors.toList());
 
@@ -99,24 +93,44 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
     private int compactness(Integer[] values) {
         int min = Integer.MAX_VALUE;
         int max = 0;
-        for (int i : values) {
-            if (i < min) {
-                min = i;
+        for (int v : values) {
+            if (v < min) {
+                min = v;
             }
-            if (i > max) {
-                max = i;
+            if (v > max) {
+                max = v;
             }
         }
-        final double d = max - min;
-        final int[] data = new int[buckets];
-        int best = 0;
+        final double d = max - min + 1;
+        final int buckets = (int) d;
+        int[] data = new int[buckets];
         for (int v : values) {
-            final int t = (int) ((v - min) / d * (buckets - 1));
-            data[t]++;
-            best = Math.max(data[t], best);
+            final int t = (int) (((v - min) / d) * (data.length - 1));
+            data[t] = 1; // = Math.max(2, data[t] + 1);
+        }
+        data = foldTo(data, 16);
+        int best = 0;
+        for (int i = 0; i < data.length; i++) {
+            best = Math.max(data[i], best);
         }
 
+//        System.out.println(Arrays.toString(data));
+
+
         return best;
+    }
+
+
+    private int[] foldTo(int[] data, int n) {
+        int l = data.length;
+        do {
+            l /= 2;
+            for (int i = 0; i < l; i++) {
+                data[i] = (data[i * 2] + data[i * 2 + 1]);
+            }
+        } while (l > n);
+
+        return Arrays.copyOf(data, l);
     }
 
     private void add(int track, int ts) {
@@ -140,9 +154,5 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
             this.count = count;
         }
 
-        public String mapToString(H2Dao dao) {
-            return dao.getTrack(track) + " (" + count + ")";
-
-        }
     }
 }

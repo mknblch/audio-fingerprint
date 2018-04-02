@@ -3,11 +3,10 @@ package de.mknblch.audiofp.db;
 import com.tagtraum.jipes.AbstractSignalProcessor;
 import de.mknblch.audiofp.Feature;
 import de.mknblch.audiofp.Hash;
+import de.mknblch.audiofp.buffer.DB;
 import org.slf4j.Logger;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.sql.SQLException;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -18,44 +17,27 @@ public class DBWriter extends AbstractSignalProcessor<Feature, Void> {
 
     private static final Logger LOGGER = getLogger(DBWriter.class);
 
-    private final Path track;
-    private final H2Dao.BatchInsert batchInsert;
-    private final boolean trackExists;
+    private final DB.BatchImport batchImport;
 
-    public DBWriter(H2Dao dao, Path track) throws SQLException {
-        this.track = track;
-        final String name = track.getFileName().toString();
-        trackExists = dao.trackExists(name);
-        if (trackExists) {
-            batchInsert = null;
-        } else {
-            batchInsert = dao.batchInsert(name);
-        }
+    public DBWriter(DB.BatchImport batchImport) {
+        this.batchImport = batchImport;
     }
+
 
     @Override
     protected Void processNext(Feature feature) throws IOException {
-        if (trackExists) {
-            return null;
-        }
         final Hash[] hashes = feature.hashes;
         if (hashes == null || hashes.length == 0) {
             return null;
         }
-        batchInsert.insertHash(hashes);
+        for (Hash hash : hashes) {
+            batchImport.add(hash.hash(), (int) hash.timestamp);
+        }
         return null;
     }
 
     @Override
     public void flush() throws IOException {
-        if (trackExists) {
-            return;
-        }
-        try {
-            LOGGER.debug("writing {}", track);
-            batchInsert.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        batchImport.commit();
     }
 }
