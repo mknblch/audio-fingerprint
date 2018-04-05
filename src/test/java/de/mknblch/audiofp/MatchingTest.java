@@ -59,7 +59,7 @@ public class MatchingTest {
                     if (p.toFile().isFile()) {
                         try {
                             System.out.println(p);
-                            findTrack(p, 0, 4000)
+                            findTrack(p, 0, 7000)
                                     .forEach(t -> System.out.println("\t" + t));
                         } catch (IOException | UnsupportedAudioFileException e) {
                             e.printStackTrace();

@@ -39,8 +39,8 @@ public class ImportTracksTest {
 
     public static final String PATH = "c:/data/db.db";
     // TODO change
-    private static Path path = Paths.get("c:/data/test/tracks");
-//    private static Path path = Paths.get("D:/music");
+//    private static Path path = Paths.get("c:/data/test/tracks");
+    private static Path path = Paths.get("D:/music");
 
     private static ExecutorService pool;
     private static DB db;
@@ -63,7 +63,7 @@ public class ImportTracksTest {
             if (known.test(path)) {
                 continue;
             }
-            if (i++ > 500) {
+            if (i++ > 50) {
                 break;
             }
             pool.execute(() -> {
