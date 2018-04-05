@@ -21,11 +21,6 @@
     <profiles>
         <profile>
             <id>win64_ffsampledsp</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
             <dependencies>
                 <dependency>
                     <groupId>com.tagtraum</groupId>
@@ -43,11 +38,6 @@
         </profile>
         <profile>
             <id>win64_mfsampledsp</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
             <dependencies>
                 <dependency>
                     <groupId>com.tagtraum</groupId>
