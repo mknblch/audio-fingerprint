@@ -20,7 +20,7 @@
 
     <profiles>
         <profile>
-            <id>windows</id>
+            <id>win64_ffsampledsp</id>
             <activation>
                 <os>
                     <family>windows</family>
@@ -33,10 +33,46 @@
                     <version>0.9.24</version>
                     <type>dylib</type>
                 </dependency>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>ffsampledsp-java</artifactId>
+                    <version>0.9.24</version>
+                    <type>jar</type>
+                </dependency>
             </dependencies>
         </profile>
         <profile>
-            <id>macosx_64</id>
+            <id>win64_mfsampledsp</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>mfsampledsp</artifactId>
+                    <version>0.9.7</version>
+                    <type>jar</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>mfsampledsp</artifactId>
+                    <version>0.9.7</version>
+                    <type>dll</type>
+                    <classifier>i386</classifier>
+                </dependency>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>mfsampledsp</artifactId>
+                    <version>0.9.7</version>
+                    <type>dll</type>
+                    <classifier>x86_64</classifier>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>osx64</id>
             <activation>
                 <os>
                     <family>osx</family>
@@ -48,6 +84,12 @@
                     <artifactId>ffsampledsp-x86_64-darwin</artifactId>
                     <version>0.9.24</version>
                     <type>dylib</type>
+                </dependency>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>ffsampledsp-java</artifactId>
+                    <version>0.9.24</version>
+                    <type>jar</type>
                 </dependency>
                 <dependency>
                     <groupId>com.tagtraum</groupId>
@@ -67,12 +109,6 @@
             <groupId>com.tagtraum</groupId>
             <artifactId>jipes</artifactId>
             <version>0.9.14</version>
-        </dependency>
-        <dependency>
-            <groupId>com.tagtraum</groupId>
-            <artifactId>ffsampledsp-java</artifactId>
-            <version>0.9.24</version>
-            <type>jar</type>
         </dependency>
         <!--logging-->
         <dependency>

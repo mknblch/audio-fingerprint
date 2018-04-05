@@ -27,11 +27,10 @@ unit tests since managing a runnable jar with native dependencies is a mess and.
 
 The mp3-conversion and all DSP-tasks are realized with @hendriks73's great libraries:
  - [Jipes](https://github.com/hendriks73/jipes) for all the DSP tasks 
- - [mfsampledsp](https://github.com/hendriks73/mfsampledsp) for mp3 conversion on windows
- - [casampledsp](https://github.com/hendriks73/casampledsp) on mac
+ - [ffsampledsp](https://github.com/hendriks73/ffsampledsp) for mp3 conversion
 
 I suggest to check out their documentation before reading the source, it is very well documented and makes things 
-more clear. The underlying database engine is [H2](https://github.com/h2database).
+more clear.
 
 The workflow is split up into different signal processors from Jipes. 
 
@@ -84,7 +83,7 @@ a unique id for the song and the timestamp of their occurrence.
 to transform short parts of the given file into hashes and matches them against the DB. I tried to keep the matching
 logic as simple as possible. Unfortunately just taking the count of matching hashes does not work with 1000 songs 
 anymore. To evaluate which track matches best against a list of hashes I just take the list of corresponding timestamps 
-and calculate their frequency in a hardcoded time raster and it's maximum value is the final score of a track. 
+and calculate their frequency in a time raster and it's maximum value is the final score of a track. 
 This approach is far from optimal but led to good results on my data set.
 
 ### Image rendering
