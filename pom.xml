@@ -29,23 +29,32 @@
             <dependencies>
                 <dependency>
                     <groupId>com.tagtraum</groupId>
-                    <artifactId>mfsampledsp</artifactId>
-                    <version>0.9.7</version>
-                    <type>jar</type>
+                    <artifactId>ffsampledsp-x86_64-darwin</artifactId>
+                    <version>0.9.24</version>
+                    <type>dylib</type>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>macosx_64</id>
+            <activation>
+                <os>
+                    <family>osx</family>
+                </os>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.tagtraum</groupId>
+                    <artifactId>ffsampledsp-x86_64-darwin</artifactId>
+                    <version>0.9.24</version>
+                    <type>dylib</type>
                 </dependency>
                 <dependency>
                     <groupId>com.tagtraum</groupId>
-                    <artifactId>mfsampledsp</artifactId>
-                    <version>0.9.7</version>
-                    <type>dll</type>
-                    <classifier>i386</classifier>
-                </dependency>
-                <dependency>
-                    <groupId>com.tagtraum</groupId>
-                    <artifactId>mfsampledsp</artifactId>
-                    <version>0.9.7</version>
-                    <type>dll</type>
-                    <classifier>x86_64</classifier>
+                    <!-- artifact for the macOS universal fat binary -->
+                    <artifactId>ffsampledsp-universal</artifactId>
+                    <version>0.9.24</version>
+                    <type>dylib</type>
                 </dependency>
             </dependencies>
         </profile>
@@ -58,6 +67,12 @@
             <groupId>com.tagtraum</groupId>
             <artifactId>jipes</artifactId>
             <version>0.9.14</version>
+        </dependency>
+        <dependency>
+            <groupId>com.tagtraum</groupId>
+            <artifactId>ffsampledsp-java</artifactId>
+            <version>0.9.24</version>
+            <type>jar</type>
         </dependency>
         <!--logging-->
         <dependency>
@@ -76,12 +91,6 @@
             <version>1.7.21</version>
         </dependency>
         <!--test-->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.196</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -44,7 +44,7 @@ public class MatchingTest {
     private static DB db;
 
     @BeforeClass
-    public static void setup() throws IOException {
+    public static void setup() throws IOException, InterruptedException {
         db = DB.load(dbPath);
         System.out.println(db);
     }
