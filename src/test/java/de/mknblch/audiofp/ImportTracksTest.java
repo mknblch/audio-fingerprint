@@ -36,16 +36,18 @@ public class ImportTracksTest {
     private static final Logger LOGGER = getLogger(ImportTracksTest.class);
 
     private static final String filetypes = "wav,mp3";
+
+    public static final String PATH = "c:/data/db.db";
     // TODO change
-//    private static Path path = Paths.get("c:/data/test/tracks");
-    private static Path path = Paths.get("D:/music");
+    private static Path path = Paths.get("c:/data/test/tracks");
+//    private static Path path = Paths.get("D:/music");
 
     private static ExecutorService pool;
     private static DB db;
 
     @BeforeClass
     public static void setup() throws IOException {
-        db = DB.load(Paths.get("D:/db.db"));
+        db = DB.load(Paths.get(PATH));
         pool = Executors.newFixedThreadPool(7);
     }
 
@@ -61,7 +63,7 @@ public class ImportTracksTest {
             if (known.test(path)) {
                 continue;
             }
-            if (i++ > 50) {
+            if (i++ > 500) {
                 break;
             }
             pool.execute(() -> {
@@ -79,7 +81,7 @@ public class ImportTracksTest {
 
         System.out.println(db);
 
-        db.write(Paths.get("D:/db.db"));
+        db.write(Paths.get(PATH));
     }
 
     private void importTrack(Path path) throws IOException, UnsupportedAudioFileException, SQLException {

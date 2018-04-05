@@ -52,7 +52,19 @@ public class DB {
 
     @Override
     public String toString() {
-        return "DB (" + tracks.size() + ")";
+
+        final long timestamps = hashes.values().stream()
+                .flatMap(m -> m.values().stream())
+                .mapToInt(List::size)
+                .count();
+
+        return String.format("DB {tracks:%d, hashes:%d, timestamps:%d}",
+                tracks.size(),
+                hashes.keySet().size(),
+                timestamps
+        );
+
+//        return "DB (" + tracks.size() + ")";
     }
 
     public void find(int hash, BiConsumer<Integer, Integer> consumer) {
@@ -72,28 +84,29 @@ public class DB {
         FileChannel inChannel = aFile.getChannel();
         MappedByteBuffer buffer = inChannel.map(FileChannel.MapMode.READ_ONLY, 0, inChannel.size());
         final List<Object> list = (List<Object>) Reader.read(buffer);
+        inChannel.close();
         return new DB(list);
     }
 
     public void write(Path dbPath) throws IOException {
         final ByteBuffer buffer = Writer.write(db);
         buffer.flip();
-        final FileOutputStream outputStream = new FileOutputStream(dbPath.toFile(), false);
-        outputStream.getChannel()
-                .write(buffer);
-        outputStream.close();
+        try(final FileOutputStream outputStream = new FileOutputStream(dbPath.toFile(), false)) {
+            outputStream.getChannel()
+                    .write(buffer);
+        }
     }
 
     private void add(int track, int hash, List<Integer> ts) {
         Map<Integer, List<Integer>> map = hashes.get(hash);
         if (null == map) {
             map = new HashMap<>();
-            final ArrayList<Integer> list = new ArrayList<>(Math.min(ts.size(), B));
+            final ArrayList<Integer> list = new ArrayList<>(Math.max(ts.size(), B));
             list.addAll(ts);
             map.put(track, list);
             hashes.put(hash, map);
         } else {
-            List<Integer> list = map.computeIfAbsent(track, k -> new ArrayList<>(Math.min(ts.size(), B)));
+            List<Integer> list = map.computeIfAbsent(track, k -> new ArrayList<>(Math.max(ts.size(), B)));
             list.addAll(ts);
         }
     }

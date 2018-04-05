@@ -24,16 +24,16 @@ public class Setup {
 
     public static final PipeBuilder FINGERPRINT_SETUP = new PipeBuilder()
             .withFrames(2048)
-            .withDownsample(2)
+            .withDownsample(3)
             .withWhiteningKillFactor(1.0 / 3)
             .withCutFreqBottom(Tones.A.shift(-4))
             .withCutFreqTop(Tones.A.shift(4))
             .withLocalMaximumLookupWidth(5)
-            .withLocalMaximumLookupHeightFunction(WindowSizeFunction.adaptive(11, 15))
-            .withHashingLookupHeightFunction(WindowSizeFunction.adaptive(5, 30))
-            .withMaxHashesPerFrame(4)
+            .withLocalMaximumLookupHeightFunction(WindowSizeFunction.adaptive(7, 15))
+            .withHashingLookupHeightFunction(WindowSizeFunction.adaptive(12, 36))
+            .withMaxHashesPerFrame(8)
             .withMaxHashesPerReference(1)
-            .withHashScoreFunction((i0, i1, f0, f1, vf0, vf1) -> vf0 + vf1 / 2, true);
+            .withHashScoreFunction((i0, i1, f0, f1, vf0, vf1) -> vf0 + vf1 / 2f, true);
 
     public static List<Path> listTracks(Path path, String filetypes) throws IOException {
 

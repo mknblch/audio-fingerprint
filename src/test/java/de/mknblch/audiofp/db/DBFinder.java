@@ -7,8 +7,6 @@ import de.mknblch.audiofp.Hash;
 import de.mknblch.audiofp.buffer.DB;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,7 +18,6 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
     public static final String ID = DBFinder.class.getName();
 
     public static final Comparator<Candidate> CANDIDATE_COMPARATOR = Comparator.comparingInt(a -> a.count);
-    private final int buckets;
 
     private final SignalProcessorSupport<List<String>> signalProcessorSupport = new SignalProcessorSupport<>();
 
@@ -28,8 +25,7 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
     private final DB db;
     private List<String> result;
 
-    public DBFinder(int buckets, DB db) {
-        this.buckets = buckets;
+    public DBFinder(DB db) {
         this.db = db;
         bag = new HashMap<>();
     }
@@ -102,33 +98,34 @@ public class DBFinder implements SignalProcessor<Feature, List<String>> {
             }
         }
         final double d = max - min + 1;
-        final int buckets = (int) d;
+        final int buckets = (int) d ;
         int[] data = new int[buckets];
         for (int v : values) {
             final int t = (int) (((v - min) / d) * (data.length - 1));
-            data[t] = 1; // = Math.max(2, data[t] + 1);
+            data[t]++; // = 2; //Math.max(4, data[t] + 1);
         }
-        data = foldTo(data, 16);
+//        System.out.println(Arrays.toString(data));
+        data = fold(data, 50);
         int best = 0;
         for (int i = 0; i < data.length; i++) {
             best = Math.max(data[i], best);
         }
 
-//        System.out.println(Arrays.toString(data));
 
 
         return best;
     }
 
 
-    private int[] foldTo(int[] data, int n) {
+    private int[] fold(int[] data, int n) {
         int l = data.length;
-        do {
+        while (l > n) {
             l /= 2;
             for (int i = 0; i < l; i++) {
                 data[i] = (data[i * 2] + data[i * 2 + 1]);
+//                data[i] = Math.max(data[i * 2], data[i * 2 + 1]);
             }
-        } while (l > n);
+        }
 
         return Arrays.copyOf(data, l);
     }

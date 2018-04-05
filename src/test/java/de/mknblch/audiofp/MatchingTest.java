@@ -12,11 +12,9 @@ import org.slf4j.Logger;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -37,10 +35,9 @@ public class MatchingTest {
      * number of timebuckets for track matching.
      * should be somehow related to the recording duration for matching
      */
-    public static final int BUCKETS = 10000;
 
     // TODO change
-    private static Path dbPath = Paths.get("D:/db.db");
+    private static Path dbPath = Paths.get("C:/data/db.db");
 
     private static Path path = Paths.get("C:/data/test/mix");
 
@@ -62,7 +59,7 @@ public class MatchingTest {
                     if (p.toFile().isFile()) {
                         try {
                             System.out.println(p);
-                            findTrack(p, 0, 5000)
+                            findTrack(p, 0, 4000)
                                     .forEach(t -> System.out.println("\t" + t));
                         } catch (IOException | UnsupportedAudioFileException e) {
                             e.printStackTrace();
@@ -88,7 +85,7 @@ public class MatchingTest {
         pump.add(Setup.FINGERPRINT_SETUP
                 .build()
 //                .joinWith(new DuplicateFilter())
-                .joinWith(new DBFinder(BUCKETS, db)));
+                .joinWith(new DBFinder(db)));
 
         return (List<String>) pump.pump().get(DBFinder.ID);
     }

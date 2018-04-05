@@ -39,7 +39,7 @@ public class Reader {
 
     private static Object readList(ByteBuffer buffer) {
         final int size = buffer.getInt();
-        final ArrayList<Object> objects = new ArrayList<>();
+        final ArrayList<Object> objects = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             objects.add(read(buffer));
         }
@@ -48,7 +48,7 @@ public class Reader {
 
     private static Object readMap(ByteBuffer buffer) {
         final int size = buffer.getInt();
-        final Map<Object, Object> map = new HashMap<>();
+        final Map<Object, Object> map = new HashMap<>(size);
         for (int i = 0; i < size; i++) {
             final Object key = read(buffer);
             final Object value = read(buffer);

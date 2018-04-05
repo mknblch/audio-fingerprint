@@ -34,7 +34,7 @@ public class PipeBuilder {
     private double cutFreqTop = Tones.A.shift(8);
 
     // whitening
-    private int whiteningLookupWindow = 30;
+    private int whiteningLookupWindow = 9;
     private double whiteningKillFactor = 1f / 4f;
 
     // local max
@@ -44,8 +44,8 @@ public class PipeBuilder {
     // hashing
     private int maxHashesPerFrame = 6;
     private int maxHashesPerReference = 2;
-    private long hashingMinDt = 100;
-    private long hashingMaxDt = 1000;
+    private long hashingMinDt = 200;
+    private long hashingMaxDt = 600;
     private IntBinaryOperator hashingLookupHeightFunction = WindowSizeFunction.adaptive(6, 30);
     private Fingerprint.ScoreFunction hashScoreFunction = (int i0, int i1, int f0, int f1, float vf0, float vf1) -> vf0 + vf1 / 2;
     private boolean scoreMax = true;

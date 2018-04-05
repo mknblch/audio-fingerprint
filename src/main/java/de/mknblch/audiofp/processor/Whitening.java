@@ -31,13 +31,17 @@ public class Whitening extends AbstractSignalProcessor<AudioSpectrum, AudioSpect
     @Override
     protected AudioSpectrum processNext(AudioSpectrum input) throws IOException {
         final float[] data = input.getMagnitudes();
-        final double kill = killFactor * Floats.max(runningMax.getData());
+        final double kill;
+        if (!runningMax.isSaturated()) {
+            kill = killFactor * Floats.max(data) * 1.5;
+        } else {
+            kill = killFactor * Floats.max(runningMax.getData());
+        }
         float max = 0;
         for (int i = 0; i < data.length; i++) {
             if (data[i] < kill) {
                 data[i] = 0f;
-            }
-            if (data[i] > max) {
+            } else if (data[i] > max) {
                 max = data[i];
             }
         }
