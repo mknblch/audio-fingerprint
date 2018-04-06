@@ -62,7 +62,7 @@
             </dependencies>
         </profile>
         <profile>
-            <id>osx64</id>
+            <id>osx64_ffsampledsp</id>
             <activation>
                 <os>
                     <family>osx</family>
